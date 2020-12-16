@@ -1,3 +1,9 @@
+''' 
+US Presidential Election 2020 Twitter Statistics
+by Rafael Souza, Maria Barrett, Luigi Ferreira, Carolina Festugatto
+https://github.com/rafaelvsouza/us-election-twitter-stats/
+'''
+
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType, DecimalType
