@@ -43,13 +43,28 @@ print('US ELECTION TWITTER STATS')
 print('=====================================================')
 print('Reading CSV file... \n')
 
-df = spark.read.format("csv") \
+df_trump = spark.read.format("csv") \
       .option("header", True) \
       .option("multiLine", True) \
       .option("escape", "\"") \
       .schema(schema) \
-      .load("/user/rafael/twitter/trump")
-#      .load("/user/hadoop/tweets/donaldtrump")
+      .load("/user/hadoop/tweets/donaldtrump")
+#      .load("/user/rafael/twitter/trump")
+
+df_biden = spark.read.format("csv") \
+      .option("header", True) \
+      .option("multiLine", True) \
+      .option("escape", "\"") \
+      .schema(schema) \
+      .load("/user/hadoop/tweets/joebiden")
+
+df_union = df_trump.union(df_biden)
+
+print("after the union: {}".format(df_union.count()))
+
+df = df_union.distinct()
+
+print("after the distinct: {}".format(df.count()))
 
 print('CSV Schema... \n')
 
