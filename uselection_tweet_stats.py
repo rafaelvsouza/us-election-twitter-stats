@@ -60,11 +60,32 @@ df_biden = spark.read.format("csv") \
 
 df_union = df_trump.union(df_biden)
 
-print("after the union: {}".format(df_union.count()))
+#print("after the union: {}".format(df_union.count()))
 
-df = df_union.distinct()
+#df = df_union.distinct()
 
-print("after the distinct: {}".format(df.count()))
+#print("after the distinct: {}".format(df.count()))
+
+df = df_union.dropDuplicates(['tweet'])
+
+
+#print("after tweet dropDuplicates: {}".format(df_distinct_tweet_only.count()))
+
+#df_distinct_tweet_only.show()
+
+
+#df_used_columns_only = df_union.dropDuplicates(['created_at'
+#                                                ,'city'
+#                                                ,'state'
+#                                                ,'country'
+#                                                ,'continent'
+#                                                ,'tweet'
+#                                                ,'likes'
+#                                                ,'retweet_count'
+#                                                ,'user_name'
+#                                               ])
+
+#print("after used columns dropDuplicates: {}".format(df_used_columns_only.count()))
 
 print('CSV Schema... \n')
 
