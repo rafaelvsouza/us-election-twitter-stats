@@ -25,6 +25,8 @@ The scripts was writter in Python with Pyspark libraries and uses a dataset from
 * Python 3.6.9
 
 ## Environmental Variables
+You need to define to follwing Environmental Variables:
+
  * JAVA_HOME - Home directory for the target java version. 
   `export JAVA_HOME = /usr/lib/jvm/java-8-openjdk-amd64`
  * HADOOP_HOME - Hadoop's installation home directory. 
@@ -38,10 +40,78 @@ The scripts was writter in Python with Pyspark libraries and uses a dataset from
  * PYTHONIOENCODING - Enconding code to be used by Python
   `export PYTHONIOENCODING=utf8`
 
+## Hadoop configuration
+Once you have set the environmental variables, you need to run the follow commands in a shell terminal:
+* hadoopenv.sh
+```
+sed -i "\$aexport JAVA_HOME=$JAVA_HOME" $HADOOP_HOME/etc/hadoop/hadoopenv.sh
+```
+* Hadoop logs
+```
+if [ ! -d $HADOOP_HOME/logs ]; then mkdir $HADOOP_HOME/logs;fi
+```
+* Haddop core-site.xml
+```
+CORE_SITE=$HADOOP_HOME/etc/hadoop/core-site.xml
+mv $CORE_SITE $CORE_SITE.old
+cat >$CORE_SITE <<EOL
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://localhost:9000</value>
+</property>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/home/${user.name}/hadooptmp</value>
+</property>
+</configuration>
+EOL
+```
+* Hadoop hdfs-site.xml
+```
+HDFS_SITE=$HADOOP_HOME/etc/hadoop/hdfs-site.xml
+mv $HDFS_SITE $HDFS_SITE.old
+cat >$HDFS_SITE <<EOL
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+</configuration>
+EOL
+```
+* Hadoop namenode formatting
+```
+echo 'Y' | hdfs namenode -format
+```
+
+* Hadoop user work directory and tmp directory creation:
+```
+hdfs dfs -mkdir -p /user/$USER
+hdfs dfs -chown $USER:$USER /user/$USER
+hdfs dfs -mkdir /tmp
+hdfs dfs -chmod 777 /tmp
+```
+
+Obs: In our case, the user name is `hadoop`.
+
 ## Starting the environment
+You can start the Hadoop file system using the following commands:
 ```bash
 hdfs --daemon start namenode
 hdfs --daemon start datanode
+```
+
+## Uploading the dataset to Hadoop file system
+To be able to run our solution, you need to upload the dataset to Hadoop file system. An example in how you can do it, is as follow:
+
+```
+hdfs dfs -mkdir -p tweet/donaldtrump
+hdfs dfs -put hashtag_donaldtrump.csv tweet/donaldtrump
 ```
 
 **USAGE:**  
