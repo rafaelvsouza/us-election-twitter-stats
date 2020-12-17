@@ -38,7 +38,11 @@ The scripts was writter in Python with Pyspark libraries and uses a dataset from
  * PYTHONIOENCODING - Enconding code to be used by Python
   `export PYTHONIOENCODING=utf8`
 
-## Starting the enviroment
+## Starting the environment
+```bash
+hdfs --daemon start namenode
+hdfs --daemon start datanode
+```
 
 **USAGE:**  
 spark-submit uselection-tweet-stats.py
