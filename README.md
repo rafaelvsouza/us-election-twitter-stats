@@ -114,8 +114,12 @@ hdfs dfs -mkdir -p tweet/donaldtrump
 hdfs dfs -put hashtag_donaldtrump.csv tweet/donaldtrump
 ```
 
-**USAGE:**  
-spark-submit uselection-tweet-stats.py
+## Solution usage
+In the file `uselection-tweet-stats.py`, at line 51, you need to inform the path of your's dataset in hdfs. In our case, the path is `/user/hadoop/tweets/donaldtrump`.
+Once you have defined dataset's path, you can run the solution as follow:
+```
+$SPARK_HOME/bin/spark-submit uselection-tweet-stats.py
+````
 
 The code execution will print all the results to the terminal.
 
